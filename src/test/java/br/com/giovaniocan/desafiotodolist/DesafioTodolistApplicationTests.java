@@ -16,25 +16,31 @@ class DesafioTodolistApplicationTests {
 	@Test
 	void testCreateTodoSuccess() {
 		var todo = new Todo("todo 1", "desc todo 1", false, 1);
-	
+
 		WebTestClient
-			.post() // o metodo
-			.uri("/todos") // a url
-			.bodyValue(todo) // passando o body da requisicao
-			.exchange() // faznedo a chamada
-			.expectStatus().isOk() // espera o status do retorno
-			.expectBody()
-			.jsonPath("$").isArray() // esse "$" é para pegar o retorno do json
-			.jsonPath("$.length()").isEqualTo(1)
-			.jsonPath("$[0].nome").isEqualTo(todo.getNome())
-			.jsonPath("$[0].descricao").isEqualTo(todo.getDescricao())
-			.jsonPath("$[0].realizado").isEqualTo(todo.isRealizado())
-			.jsonPath("$[0].prioridade").isEqualTo(todo.getPrioridade());
+				.post() // o metodo
+				.uri("/todos") // a url
+				.bodyValue(todo) // passando o body da requisicao
+				.exchange() // faznedo a chamada
+				.expectStatus().isOk() // espera o status do retorno
+				.expectBody()
+				.jsonPath("$").isArray() // esse "$" é para pegar o retorno do json
+				.jsonPath("$.length()").isEqualTo(1)
+				.jsonPath("$[0].nome").isEqualTo(todo.getNome())
+				.jsonPath("$[0].descricao").isEqualTo(todo.getDescricao())
+				.jsonPath("$[0].realizado").isEqualTo(todo.isRealizado())
+				.jsonPath("$[0].prioridade").isEqualTo(todo.getPrioridade());
 
 	}
 
 	@Test
 	void testCreateTodoFalure() {
+		WebTestClient
+				.post()
+				.uri("/todos")
+				.bodyValue(new Todo("", "", false, 0))
+				.exchange()
+				.expectStatus().isBadRequest();
 	}
 
 }
